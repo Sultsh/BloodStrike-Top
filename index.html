@@ -229,9 +229,16 @@
       padding: 12px 12px;
       border-radius: 14px;
       outline:none;
+      transition: .15s;
     }
     .input::placeholder{color:rgba(233,236,255,.45)}
     .hint{color:var(--muted); font-size:12px; margin-top:8px; line-height:1.45}
+
+    /* ✅ ID qizil yonishi */
+    .input.invalid{
+      border-color: rgba(255,107,107,.95);
+      box-shadow: 0 0 0 4px rgba(255,107,107,.14);
+    }
 
     .summary{
       margin-top:12px;
@@ -349,25 +356,6 @@
     }
     .note .t{font-weight:900; font-size:13px; margin:0 0 4px}
     .note .d{margin:0; color: var(--muted); font-size:12px; line-height:1.35}
-
-    /* ✅ QO‘SHILDI: ID yoki Paket xato bo‘lsa qizil yonishi + silkish */
-    .input.error{
-      border-color: var(--danger);
-      box-shadow: 0 0 0 3px rgba(255,107,107,.18);
-      animation: shake .18s linear 2;
-    }
-    .card.error{
-      border-color: rgba(255,107,107,.55);
-      box-shadow: 0 0 0 3px rgba(255,107,107,.10), var(--shadow);
-      animation: shake .18s linear 2;
-    }
-    @keyframes shake{
-      0%{transform:translateX(0)}
-      25%{transform:translateX(-4px)}
-      50%{transform:translateX(4px)}
-      75%{transform:translateX(-3px)}
-      100%{transform:translateX(0)}
-    }
   </style>
 </head>
 <body>
@@ -405,7 +393,7 @@
 
     <div class="grid">
       <!-- Left -->
-      <section class="card" id="packsCard">
+      <section class="card">
         <div class="head">
           <h2>📦 Paketlar</h2>
           <div class="sub">Paketni bosing. O‘ng tomonda buyurtma tayyorlanadi.</div>
@@ -472,12 +460,42 @@
     <div class="footer">© SULTSH — Blood Strike Donat</div>
   </div>
 
-<script>
-  // ====== SETTINGS ======
-  const TELEGRAM_USERNAME = "SULTSH_YT"; // @SULTSH_YT
+<!-- ✅ MUHIM: script endi type="module" bo‘ldi -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  // ✅ Firebase config (sening)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBKhvdPBHC0Ml7d4-lJs_31jkrvPxpX6BM",
+    authDomain: "bloodstrike-aec49.firebaseapp.com",
+    projectId: "bloodstrike-aec49",
+    storageBucket: "bloodstrike-aec49.firebasestorage.app",
+    messagingSenderId: "972640427859",
+    appId: "1:972640427859:web:af1c051b6f4da4825acba6",
+    measurementId: "G-8PZZFXHJXS"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // ✅ Online adminlar
+  const ADMINS = {
+    admin1: "SULTSH_YT",
+    admin2: "dilshodbs1031"
+  };
+
+  async function getActiveTelegramUsername(){
+    try{
+      const snap = await getDoc(doc(db, "settings", "main"));
+      const activeAdmin = snap.exists() ? (snap.data().activeAdmin || "admin1") : "admin1";
+      return ADMINS[activeAdmin] || ADMINS.admin1;
+    }catch(e){
+      return ADMINS.admin1;
+    }
+  }
 
   // 🔔 E'lonlar (ko‘p dona)
-  // Yangi e'lon qo'shish: pastga yana bitta {title, text} qo‘shib qo‘y
   const ANNOUNCEMENTS = [
     { title: "🔥 Aksiya", text: "Bugun 500+40 va 1000+100 GOLD chegirmada! Ulgurib qoling." },
     { title: "⏰ Ish vaqti", text: "Har kuni 09:00 – 23:00. Buyurtmalar tez yetkaziladi." },
@@ -488,25 +506,24 @@
   const IMG = "assets/img/";
   const FALLBACK_ICON = IMG + "bloodstrike.png";
 
-  // ====== PACKS (sale:true + oldPrice bo‘lsa: AKSIYA + eski narx ustidan chiziladi) ======
+  // ====== PACKS ======
   const PACKS = [
     { id:"g100",  cat:"gold", title:" 100 + 5 Gold",        price:"9.999 uzs",   icon: IMG+"gold-100.png",  sale:false },
     { id:"g300",  cat:"gold", title:" 300 + 15 Gold",       price:"29.999 uzs",  icon: IMG+"gold-300.png",  sale:false },
 
-    // AKSIYA MISOLLARI (oldPrice qo'yildi)
     { id:"g500",  cat:"gold", title:" 500 + 40 Gold",       price:"44.999 uzs",  oldPrice:"49.999 uzs", icon: IMG+"gold-500.png",  sale:true  },
     { id:"g1000", cat:"gold", title:" 1000 + 100 Gold",     price:"89.999 uzs",  oldPrice:"99.999 uzs", icon: IMG+"gold-1000.png", sale:true  },
 
     { id:"g2000", cat:"gold", title:" 2000 + 260 Gold",     price:"179.999 uzs", oldPrice:"200.000 uzs", icon: IMG+"gold-2000.png", sale:true },
     { id:"g5000", cat:"gold", title:" 5000 + 800 Gold",     price:"464.999 uzs", oldPrice:"500.000 uzs", icon: IMG+"gold-5000.png", sale:true },
 
-    { id:"pe",    cat:"pass", title:" Pass Elite ",   price:"42.000 uzs",  icon: IMG+"pass-elite.png",   sale:true },
-    { id:"pp",    cat:"pass", title:" Pass Premium ", price:"94.999 uzs",  icon: IMG+"pass-premium.png", sale:true },
-    { id:"lup",   cat:"pass", title:" LEVEL UP PASS",              price:"25.000 uzs",  icon: IMG+"pass-levelup.png", sale:false },
+    { id:"pe",    cat:"pass", title:" Pass Elite ",         price:"42.000 uzs",  icon: IMG+"pass-elite.png",   sale:true },
+    { id:"pp",    cat:"pass", title:" Pass Premium ",       price:"94.999 uzs",  icon: IMG+"pass-premium.png", sale:true },
+    { id:"lup",   cat:"pass", title:" LEVEL UP PASS",       price:"25.000 uzs",  icon: IMG+"pass-levelup.png", sale:false },
 
-    { id:"case1",   cat:"case", title:" Ultra Qurol Case",         price:"7.000 uzs",   icon: IMG+"luck_bag.png", sale:false },
-    { id:"coupon10",cat:"case", title:" Enternal Skin 10x Kupon",   price:"25.000 uzs",  icon: IMG+"coupon-10x.png", sale:false },
-    { id:"skin099", cat:"case", title:" 0.99$ Ultra Skin",          price:"13.000 uzs",  icon: IMG+"skin-099.png", sale:false },
+    { id:"case1",    cat:"case", title:" Ultra Qurol Case",       price:"7.000 uzs",   icon: IMG+"luck_bag.png",   sale:false },
+    { id:"coupon10", cat:"case", title:" Enternal Skin 10x Kupon", price:"25.000 uzs",  icon: IMG+"coupon-10x.png", sale:false },
+    { id:"skin099",  cat:"case", title:" 0.99$ Ultra Skin",        price:"13.000 uzs",  icon: IMG+"skin-099.png",   sale:false },
   ];
 
   // ====== STATE ======
@@ -519,7 +536,6 @@
   const searchEl = $("#search");
   const bellBtn = $("#bellBtn");
   const panel = $("#panel");
-  const packsCard = $("#packsCard");
 
   const announceListEl = $("#announceList");
 
@@ -547,10 +563,6 @@
     const packName = pack.title.replace("💸","").trim();
     const saleLine = (pack.sale && pack.oldPrice) ? `\nChegirma: ${pack.oldPrice} → ${pack.price}` : "";
     return `Salom! Men ${packName} olmoqchiman.\nNarx: ${pack.price}${saleLine}\nID: ${playerId}\n`;
-  }
-
-  function tgLink(message){
-    return `https://t.me/${TELEGRAM_USERNAME}?text=${safeTextEncode(message)}`;
   }
 
   function toast(title, msg){
@@ -652,18 +664,10 @@
 
   function getPlayerId(){ return (playerIdEl.value || "").trim(); }
 
-  /* ✅ QO‘SHILDI: ID xato bo‘lsa inputni qizil qilib silkish */
-  function markIdError(){
-    playerIdEl.classList.add("error");
-    playerIdEl.focus();
-    setTimeout(()=> playerIdEl.classList.remove("error"), 1600);
-  }
-
-  /* ✅ QO‘SHILDI: Paket tanlanmasa chapdagi Paketlar kartasini qizil qilib silkish */
-  function markPackError(){
-    packsCard.classList.add("error");
-    packsCard.scrollIntoView({behavior:"smooth", block:"start"});
-    setTimeout(()=> packsCard.classList.remove("error"), 1600);
+  // ✅ ID qizil yonishi helperlari
+  function setIdInvalid(isInvalid){
+    if(isInvalid) playerIdEl.classList.add("invalid");
+    else playerIdEl.classList.remove("invalid");
   }
 
   function validate(){
@@ -672,14 +676,15 @@
 
     if(!pack){
       toast("Paket tanlanmadi", "Chap tomondan paketni bosing.");
-      markPackError(); /* ✅ QO‘SHILDI */
       return null;
     }
     if(!pid || pid.length < 5){
       toast("ID kerak", "O‘yin ID’ingizni kiriting (kamida 5 ta belgi).");
-      markIdError(); /* ✅ O‘ZGARDI */
+      setIdInvalid(true);
+      playerIdEl.focus();
       return null;
     }
+    setIdInvalid(false);
     return {pack, pid};
   }
 
@@ -733,27 +738,32 @@
       toast("O‘chirildi", "Saqlangan ID o‘chirildi.");
     }
   });
-
   playerIdEl.addEventListener("input", ()=>{
-    playerIdEl.classList.remove("error"); /* ✅ QO‘SHILDI: yozsa qizillik o‘chadi */
+    // yozishni boshlasa qizillik o‘chsin
+    setIdInvalid(false);
+
     if(keepIdEl.checked){
       localStorage.setItem("bs_player_id", getPlayerId());
     }
   });
 
-  copyBtn.onclick = ()=>{
+  copyBtn.onclick = async ()=>{
     const ok = validate();
     if(!ok) return;
-    copyText(makeMessage(ok.pack, ok.pid));
+    const username = await getActiveTelegramUsername();
+    const text = makeMessage(ok.pack, ok.pid) + `Telegram: @${username}\n`;
+    copyText(text);
   };
 
-  buyBtn.onclick = ()=>{
+  buyBtn.onclick = async ()=>{
     const ok = validate();
     if(!ok) return;
-    window.open(tgLink(makeMessage(ok.pack, ok.pid)), "_blank", "noopener");
+
+    const username = await getActiveTelegramUsername();
+    const link = `https://t.me/${username}?text=${safeTextEncode(makeMessage(ok.pack, ok.pid))}`;
+    window.open(link, "_blank", "noopener");
   };
 
-  // 1-e’lonni toast qilib chiqaramiz
   if(ANNOUNCEMENTS.length){
     toast(ANNOUNCEMENTS[0].title, ANNOUNCEMENTS[0].text);
   }
