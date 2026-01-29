@@ -349,6 +349,25 @@
     }
     .note .t{font-weight:900; font-size:13px; margin:0 0 4px}
     .note .d{margin:0; color: var(--muted); font-size:12px; line-height:1.35}
+
+    /* ✅ QO‘SHILDI: ID yoki Paket xato bo‘lsa qizil yonishi + silkish */
+    .input.error{
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(255,107,107,.18);
+      animation: shake .18s linear 2;
+    }
+    .card.error{
+      border-color: rgba(255,107,107,.55);
+      box-shadow: 0 0 0 3px rgba(255,107,107,.10), var(--shadow);
+      animation: shake .18s linear 2;
+    }
+    @keyframes shake{
+      0%{transform:translateX(0)}
+      25%{transform:translateX(-4px)}
+      50%{transform:translateX(4px)}
+      75%{transform:translateX(-3px)}
+      100%{transform:translateX(0)}
+    }
   </style>
 </head>
 <body>
@@ -386,7 +405,7 @@
 
     <div class="grid">
       <!-- Left -->
-      <section class="card">
+      <section class="card" id="packsCard">
         <div class="head">
           <h2>📦 Paketlar</h2>
           <div class="sub">Paketni bosing. O‘ng tomonda buyurtma tayyorlanadi.</div>
@@ -500,6 +519,7 @@
   const searchEl = $("#search");
   const bellBtn = $("#bellBtn");
   const panel = $("#panel");
+  const packsCard = $("#packsCard");
 
   const announceListEl = $("#announceList");
 
@@ -632,17 +652,32 @@
 
   function getPlayerId(){ return (playerIdEl.value || "").trim(); }
 
+  /* ✅ QO‘SHILDI: ID xato bo‘lsa inputni qizil qilib silkish */
+  function markIdError(){
+    playerIdEl.classList.add("error");
+    playerIdEl.focus();
+    setTimeout(()=> playerIdEl.classList.remove("error"), 1600);
+  }
+
+  /* ✅ QO‘SHILDI: Paket tanlanmasa chapdagi Paketlar kartasini qizil qilib silkish */
+  function markPackError(){
+    packsCard.classList.add("error");
+    packsCard.scrollIntoView({behavior:"smooth", block:"start"});
+    setTimeout(()=> packsCard.classList.remove("error"), 1600);
+  }
+
   function validate(){
     const pack = PACKS.find(p=>p.id===activeId);
     const pid = getPlayerId();
 
     if(!pack){
       toast("Paket tanlanmadi", "Chap tomondan paketni bosing.");
+      markPackError(); /* ✅ QO‘SHILDI */
       return null;
     }
     if(!pid || pid.length < 5){
       toast("ID kerak", "O‘yin ID’ingizni kiriting (kamida 5 ta belgi).");
-      playerIdEl.focus();
+      markIdError(); /* ✅ O‘ZGARDI */
       return null;
     }
     return {pack, pid};
@@ -698,7 +733,9 @@
       toast("O‘chirildi", "Saqlangan ID o‘chirildi.");
     }
   });
+
   playerIdEl.addEventListener("input", ()=>{
+    playerIdEl.classList.remove("error"); /* ✅ QO‘SHILDI: yozsa qizillik o‘chadi */
     if(keepIdEl.checked){
       localStorage.setItem("bs_player_id", getPlayerId());
     }
@@ -725,7 +762,3 @@
 </script>
 </body>
 </html>
-
-
-
-
