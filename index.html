@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Blood Strike Donat — SULTSH</title>
+  <meta name="description" content="Blood Strike uchun donat narxlari, aksiya va e'lonlar. Paket tanlang va Telegram orqali buyurtma bering."/>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#121a33;
+      --card2:#0f1630;
+      --text:#e9ecff;
+      --muted:#a9b0d6;
+      --line:rgba(255,255,255,.08);
+      --accent:#ff4bd6;
+      --accent2:#31d6ff;
+      --ok:#2de38c;
+      --warn:#ffcc66;
+      --danger:#ff6b6b;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 10% 0%, rgba(255,75,214,.20), transparent 55%),
+                  radial-gradient(1000px 700px at 90% 0%, rgba(49,214,255,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .container{
+      width:min(1080px, 92vw);
+      margin: 26px auto 80px;
+    }
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: var(--shadow);
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+    .logo img{width:100%;height:100%;object-fit:contain;display:block}
+    .brand h1{margin:0;font-size:18px; line-height:1.2}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
+
+    .top-actions{display:flex; gap:10px; align-items:center;}
+    .btn{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      transition:.18s;
+      user-select:none;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.16)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,75,214,.92), rgba(49,214,255,.88));
+      border: none;
+      color:#071025;
+      font-weight:800;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:16px;
+      margin-top:12px;
+    }
+    @media (max-width: 880px){
+      .grid{grid-template-columns:1fr}
+      .top-actions{flex-wrap:wrap; justify-content:flex-end}
+    }
+
+    .card{
+      background: rgba(18,26,51,.86);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .head{
+      padding:16px 16px 12px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), transparent);
+    }
+    .card .head h2{margin:0 0 6px;font-size:15px}
+    .card .head .sub{color:var(--muted); font-size:13px}
+
+    .filters{
+      padding:12px 16px 14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .pill{
+      border:1px solid var(--line);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+      cursor:pointer;
+      background: rgba(255,255,255,.03);
+      transition:.18s;
+    }
+    .pill.active{
+      color: var(--text);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.06);
+    }
+    .search{
+      flex:1;
+      min-width:180px;
+      border:1px solid var(--line);
+      background: rgba(10,16,34,.55);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      outline:none;
+    }
+    .search::placeholder{color:rgba(233,236,255,.45)}
+
+    .list{
+      padding: 0 12px 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 620px){
+      .list{grid-template-columns:1fr}
+    }
+
+    .item{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(15,22,48,.60);
+      padding: 12px;
+      cursor:pointer;
+      transition:.18s;
+      position:relative;
+      overflow:hidden;
+
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .item:hover{transform: translateY(-2px); border-color: rgba(255,255,255,.18)}
+    .item.active{outline:2px solid rgba(49,214,255,.55); border-color: transparent}
+
+    .pack-ico{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      object-fit:contain;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding:5px;
+      flex:0 0 auto;
+    }
+    .item .content{min-width:0; flex:1;}
+    .item .title{font-weight:900; margin:0 0 6px; font-size:14px}
+    .item .meta{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .tag{
+      font-size:12px;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+
+    .priceWrap{
+      margin-left:auto;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:4px;
+      flex:0 0 auto;
+    }
+    .priceNow{font-weight:950; color:#fff}
+    .priceOld{
+      font-size:12px;
+      color: rgba(233,236,255,.55);
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(255,107,107,.85);
+    }
+
+    .badge{
+      position:absolute; top:10px; right:10px;
+      font-size:11px; font-weight:900;
+      padding:6px 8px;
+      border-radius:999px;
+      background: rgba(45,227,140,.14);
+      border:1px solid rgba(45,227,140,.30);
+      color: var(--ok);
+      display:none;
+    }
+    .item.hasSale .badge{display:inline-flex}
+
+    .side{padding: 14px 16px 16px;}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:10px;}
+    .input{
+      width:100%;
+      border:1px solid var(--line);
+      background: rgba(10,16,34,.55);
+      color: var(--text);
+      padding: 12px 12px;
+      border-radius: 14px;
+      outline:none;
+    }
+    .input::placeholder{color:rgba(233,236,255,.45)}
+    .hint{color:var(--muted); font-size:12px; margin-top:8px; line-height:1.45}
+
+    .summary{
+      margin-top:12px;
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+      border-radius: 16px;
+    }
+    .summary .k{color:var(--muted); font-size:12px}
+    .summary .v{font-weight:950; margin-top:3px}
+    .summary .row2{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:8px;
+      flex-wrap:wrap;
+    }
+    .summary .prices{
+      display:flex;
+      gap:10px;
+      align-items:baseline;
+      justify-content:flex-end;
+      margin-left:auto;
+    }
+    .summary .old{
+      color: rgba(233,236,255,.55);
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(255,107,107,.85);
+      font-size:12px;
+      font-weight:800;
+    }
+    .summary .now{font-weight:950}
+
+    .cta{display:flex; gap:10px; margin-top:12px;}
+    .cta .btn{flex:1; padding:12px 12px; border-radius:16px}
+    .mini{
+      margin-top:12px;
+      color: var(--muted);
+      font-size:12px;
+      border-top:1px solid var(--line);
+      padding-top:12px;
+      line-height:1.45;
+    }
+    .mini b{color:var(--text)}
+    .footer{margin-top:14px; color: var(--muted); font-size:12px; text-align:center;}
+
+    /* Toast (tepadan habar) */
+    .toastWrap{
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(720px, 94vw);
+      z-index: 9999;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      border-radius: 18px;
+      padding: 12px 12px;
+      background: rgba(18,26,51,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      transform: translateY(-18px);
+      opacity: 0;
+      transition: .25s;
+    }
+    .toast.show{transform: translateY(0); opacity:1}
+    .toast .dot{
+      width:10px;height:10px;border-radius:99px;margin-top:4px;
+      background: var(--warn);
+      box-shadow: 0 0 0 6px rgba(255,204,102,.12);
+    }
+    .toast .content{flex:1}
+    .toast .title{font-weight:950; font-size:13px; margin:0 0 3px}
+    .toast .msg{margin:0; color: var(--muted); font-size:13px; line-height:1.35}
+    .toast .x{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+    }
+
+    /* Bell panel (E’lonlar) */
+    .panel{
+      position: fixed;
+      top: 68px;
+      right: calc((100vw - min(1080px, 92vw))/2);
+      width: min(440px, 92vw);
+      background: rgba(18,26,51,.96);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      padding: 10px;
+      display:none;
+      z-index: 9998;
+    }
+    @media (max-width: 1080px){ .panel{right: 4vw;} }
+    .panel.show{display:block}
+    .panel h3{margin:8px 10px 6px; font-size:14px}
+    .panel .sub2{margin:0 10px 8px; color:var(--muted); font-size:12px}
+    .note{
+      border:1px solid var(--line);
+      background: rgba(15,22,48,.55);
+      padding:10px;
+      border-radius: 14px;
+      margin: 8px;
+    }
+    .note .t{font-weight:900; font-size:13px; margin:0 0 4px}
+    .note .d{margin:0; color: var(--muted); font-size:12px; line-height:1.35}
+  </style>
+</head>
+<body>
+
+  <div class="toastWrap" id="toastWrap" aria-live="polite"></div>
+
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">
+          <img src="assets/img/bloodstrike.png" alt="Blood Strike">
+        </div>
+        <div>
+          <h1>Blood Strike Donat</h1>
+          <p>Narxlar • Aksiya/E’lon • Telegram orqali buyurtma</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn" id="bellBtn" title="E'lonlar">🔔 E’lonlar</button>
+        <a class="btn primary" href="https://t.me/SULTSH_YT" target="_blank" rel="noopener">Telegram: @SULTSH_YT</a>
+      </div>
+    </header>
+
+    <div class="panel" id="panel">
+      <h3>🔔 E’lonlar</h3>
+      <p class="sub2">Yangi e’lonlar shu yerda chiqadi.</p>
+      <div id="announceList"></div>
+
+      <div class="note">
+        <p class="t">📌 Ishlash tartibi</p>
+        <p class="d">Paket tanlang → ID kiriting → “Sotib olish” → Telegram’da tayyor xabar ochiladi.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Left -->
+      <section class="card">
+        <div class="head">
+          <h2>📦 Paketlar</h2>
+          <div class="sub">Paketni bosing. O‘ng tomonda buyurtma tayyorlanadi.</div>
+        </div>
+
+        <div class="filters">
+          <input class="search" id="search" placeholder="Qidirish: 500, pass, case..." />
+          <span class="pill active" data-cat="all">Hammasi</span>
+          <span class="pill" data-cat="gold">Gold</span>
+          <span class="pill" data-cat="pass">Strike Pass</span>
+          <span class="pill" data-cat="case">Case / Skin</span>
+        </div>
+
+        <div class="list" id="list"></div>
+      </section>
+
+      <!-- Right -->
+      <aside class="card">
+        <div class="head">
+          <h2>🛒 Buyurtma</h2>
+          <div class="sub">ID kiriting va Telegram’dan yozing.</div>
+        </div>
+
+        <div class="side">
+          <label for="playerId" style="font-size:12px;color:var(--muted);">O‘yin ID (majburiy)</label>
+          <input class="input" id="playerId" placeholder="Masalan: 1234567890" inputmode="numeric" />
+
+          <div class="row">
+            <label style="display:flex; gap:8px; align-items:center; font-size:12px; color:var(--muted);">
+              <input type="checkbox" id="keepId" />
+              ID’ni eslab qolish (shu brauzerda)
+            </label>
+          </div>
+
+          <div class="summary" id="summary">
+            <div class="k">Tanlangan paket</div>
+            <div class="v" id="selName">Hech narsa tanlanmadi</div>
+
+            <div class="row2">
+              <span class="tag" id="selCat">—</span>
+
+              <div class="prices">
+                <span class="old" id="selOld" style="display:none;">—</span>
+                <span class="now" id="selNow">—</span>
+              </div>
+            </div>
+
+            <div class="hint" id="selHint">Chap tomondan paket tanlang.</div>
+          </div>
+
+          <div class="cta">
+            <button class="btn" id="copyBtn">📋 Matnni nusxa</button>
+            <button class="btn primary" id="buyBtn">✅ Sotib olish</button>
+          </div>
+
+          <div class="mini">
+            <b>Eslatma:</b> Bu sayt to‘lov qabul qilmaydi — faqat Telegram orqali buyurtma ochadi.
+            <br>Chegirma bo‘lgan paketlarda <b>AKSIYA</b> va eski narx ustidan chizilgan ko‘rinadi.
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">© SULTSH — Blood Strike Donat</div>
+  </div>
+
+<script>
+  // ====== SETTINGS ======
+  const TELEGRAM_USERNAME = "SULTSH_YT"; // @SULTSH_YT
+
+  // 🔔 E'lonlar (ko‘p dona)
+  // Yangi e'lon qo'shish: pastga yana bitta {title, text} qo‘shib qo‘y
+  const ANNOUNCEMENTS = [
+    { title: "🔥 Aksiya", text: "Bugun 500+40 va 1000+100 GOLD chegirmada! Ulgurib qoling." },
+    { title: "⏰ Ish vaqti", text: "Har kuni 09:00 – 23:00. Buyurtmalar tez yetkaziladi." },
+    { title: "⚠️ Eslatma", text: "To‘lovdan keyin chek (skrin) yuboring." },
+  ];
+
+  // Rasmlar yo‘li
+  const IMG = "assets/img/";
+  const FALLBACK_ICON = IMG + "bloodstrike.png";
+
+  // ====== PACKS (sale:true + oldPrice bo‘lsa: AKSIYA + eski narx ustidan chiziladi) ======
+  const PACKS = [
+    { id:"g100",  cat:"gold", title:" 100 + 5 Gold",        price:"9.999 uzs",   icon: IMG+"gold-100.png",  sale:false },
+    { id:"g300",  cat:"gold", title:" 300 + 15 Gold",       price:"29.999 uzs",  icon: IMG+"gold-300.png",  sale:false },
+
+    // AKSIYA MISOLLARI (oldPrice qo'yildi)
+    { id:"g500",  cat:"gold", title:" 500 + 40 Gold",       price:"44.999 uzs",  oldPrice:"49.999 uzs", icon: IMG+"gold-500.png",  sale:true  },
+    { id:"g1000", cat:"gold", title:" 1000 + 100 Gold",     price:"89.999 uzs",  oldPrice:"99.999 uzs", icon: IMG+"gold-1000.png", sale:true  },
+
+    { id:"g2000", cat:"gold", title:" 2000 + 260 Gold",     price:"179.999 uzs", icon: IMG+"gold-2000.png", sale:false },
+    { id:"g5000", cat:"gold", title:" 5000 + 800 Gold",     price:"464.999 uzs", icon: IMG+"gold-5000.png", sale:false },
+
+    { id:"pe",    cat:"pass", title:" Pass Elite (Strike Pass)",   price:"42.000 uzs",  icon: IMG+"pass-elite.png",   sale:false },
+    { id:"pp",    cat:"pass", title:" Pass Premium (Strike Pass)", price:"94.999 uzs",  icon: IMG+"pass-premium.png", sale:false },
+    { id:"lup",   cat:"pass", title:" LEVEL UP PASS",              price:"25.000 uzs",  icon: IMG+"pass-levelup.png", sale:false },
+
+    { id:"case1",   cat:"case", title:" Ultra Qurol Case",         price:"7.000 uzs",   icon: IMG+"luck_bag.png", sale:false },
+    { id:"coupon10",cat:"case", title:" Enternal Skin 10x Kupon",   price:"25.000 uzs",  icon: IMG+"coupon-10x.png", sale:false },
+    { id:"skin099", cat:"case", title:" 0.99$ Ultra Skin",          price:"13.000 uzs",  icon: IMG+"skin-099.png", sale:false },
+  ];
+
+  // ====== STATE ======
+  let activeCat = "all";
+  let activeId = null;
+
+  const $ = (s)=>document.querySelector(s);
+
+  const listEl = $("#list");
+  const searchEl = $("#search");
+  const bellBtn = $("#bellBtn");
+  const panel = $("#panel");
+
+  const announceListEl = $("#announceList");
+
+  const selName = $("#selName");
+  const selCat = $("#selCat");
+  const selOld = $("#selOld");
+  const selNow = $("#selNow");
+  const selHint = $("#selHint");
+  const playerIdEl = $("#playerId");
+  const keepIdEl = $("#keepId");
+
+  const copyBtn = $("#copyBtn");
+  const buyBtn = $("#buyBtn");
+
+  function catLabel(cat){
+    if(cat==="gold") return "Gold";
+    if(cat==="pass") return "Strike Pass";
+    if(cat==="case") return "Case / Skin";
+    return "—";
+  }
+
+  function safeTextEncode(str){ return encodeURIComponent(str); }
+
+  function makeMessage(pack, playerId){
+    const packName = pack.title.replace("💸","").trim();
+    const saleLine = (pack.sale && pack.oldPrice) ? `\nChegirma: ${pack.oldPrice} → ${pack.price}` : "";
+    return `Salom! Men ${packName} olmoqchiman.\nNarx: ${pack.price}${saleLine}\nID: ${playerId}\n`;
+  }
+
+  function tgLink(message){
+    return `https://t.me/${TELEGRAM_USERNAME}?text=${safeTextEncode(message)}`;
+  }
+
+  function toast(title, msg){
+    const wrap = $("#toastWrap");
+    wrap.innerHTML = `
+      <div class="toast show" id="toast">
+        <div class="dot"></div>
+        <div class="content">
+          <p class="title">${title}</p>
+          <p class="msg">${msg}</p>
+        </div>
+        <button class="x" id="toastClose">✕</button>
+      </div>
+    `;
+    $("#toastClose").onclick = ()=> wrap.innerHTML="";
+    setTimeout(()=>{ wrap.innerHTML=""; }, 7000);
+  }
+
+  function renderAnnouncements(){
+    announceListEl.innerHTML = ANNOUNCEMENTS.map(a => `
+      <div class="note">
+        <p class="t">${a.title}</p>
+        <p class="d">${a.text}</p>
+      </div>
+    `).join("");
+  }
+
+  function render(){
+    const q = (searchEl.value || "").toLowerCase().trim();
+
+    const filtered = PACKS.filter(p=>{
+      const byCat = (activeCat==="all") || (p.cat===activeCat);
+      const bySearch = !q || (p.title.toLowerCase().includes(q) || p.price.toLowerCase().includes(q));
+      return byCat && bySearch;
+    });
+
+    listEl.innerHTML = filtered.map(p=>{
+      const active = (p.id===activeId) ? "active" : "";
+      const saleClass = p.sale ? "hasSale" : "";
+      const icon = p.icon || FALLBACK_ICON;
+
+      const oldPriceHtml = (p.sale && p.oldPrice)
+        ? `<span class="priceOld">${p.oldPrice}</span>`
+        : ``;
+
+      return `
+        <div class="item ${active} ${saleClass}" data-id="${p.id}">
+          <div class="badge">AKSIYA</div>
+
+          <img class="pack-ico" src="${icon}" alt="">
+
+          <div class="content">
+            <p class="title">${p.title}</p>
+            <div class="meta">
+              <span class="tag">${catLabel(p.cat)}</span>
+              <div class="priceWrap">
+                ${oldPriceHtml}
+                <span class="priceNow">${p.price}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    [...document.querySelectorAll(".item")].forEach(el=>{
+      el.onclick = ()=>{
+        activeId = el.getAttribute("data-id");
+        updateSummary();
+        render();
+      };
+    });
+  }
+
+  function updateSummary(){
+    const pack = PACKS.find(p=>p.id===activeId);
+    if(!pack){
+      selName.textContent = "Hech narsa tanlanmadi";
+      selCat.textContent = "—";
+      selNow.textContent = "—";
+      selOld.style.display = "none";
+      selHint.textContent = "Chap tomondan paket tanlang.";
+      return;
+    }
+    selName.textContent = pack.title;
+    selCat.textContent = catLabel(pack.cat);
+
+    selNow.textContent = pack.price;
+
+    if(pack.sale && pack.oldPrice){
+      selOld.textContent = pack.oldPrice;
+      selOld.style.display = "inline";
+      selHint.textContent = "Aksiya bor — tezroq ulgurib qoling.";
+    } else {
+      selOld.style.display = "none";
+      selHint.textContent = "Buyurtma uchun ID kiriting.";
+    }
+  }
+
+  function getPlayerId(){ return (playerIdEl.value || "").trim(); }
+
+  function validate(){
+    const pack = PACKS.find(p=>p.id===activeId);
+    const pid = getPlayerId();
+
+    if(!pack){
+      toast("Paket tanlanmadi", "Chap tomondan paketni bosing.");
+      return null;
+    }
+    if(!pid || pid.length < 5){
+      toast("ID kerak", "O‘yin ID’ingizni kiriting (kamida 5 ta belgi).");
+      playerIdEl.focus();
+      return null;
+    }
+    return {pack, pid};
+  }
+
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      toast("Nusxalandi ✅", "Matn nusxalandi. Istasangiz Telegram’ga qo‘lda ham yopishtirasiz.");
+    }catch(e){
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      toast("Nusxalandi ✅", "Matn nusxalandi.");
+    }
+  }
+
+  // ====== INIT ======
+  renderAnnouncements();
+
+  bellBtn.onclick = ()=>{ panel.classList.toggle("show"); };
+  document.addEventListener("click", (e)=>{
+    if(!panel.contains(e.target) && e.target !== bellBtn){
+      panel.classList.remove("show");
+    }
+  });
+
+  [...document.querySelectorAll(".pill")].forEach(p=>{
+    p.onclick = ()=>{
+      [...document.querySelectorAll(".pill")].forEach(x=>x.classList.remove("active"));
+      p.classList.add("active");
+      activeCat = p.getAttribute("data-cat");
+      render();
+    };
+  });
+
+  searchEl.addEventListener("input", render);
+
+  const saved = localStorage.getItem("bs_player_id");
+  if(saved){
+    playerIdEl.value = saved;
+    keepIdEl.checked = true;
+  }
+  keepIdEl.addEventListener("change", ()=>{
+    if(keepIdEl.checked){
+      localStorage.setItem("bs_player_id", getPlayerId());
+      toast("Eslab qolindi", "ID shu brauzerda saqlanadi.");
+    } else {
+      localStorage.removeItem("bs_player_id");
+      toast("O‘chirildi", "Saqlangan ID o‘chirildi.");
+    }
+  });
+  playerIdEl.addEventListener("input", ()=>{
+    if(keepIdEl.checked){
+      localStorage.setItem("bs_player_id", getPlayerId());
+    }
+  });
+
+  copyBtn.onclick = ()=>{
+    const ok = validate();
+    if(!ok) return;
+    copyText(makeMessage(ok.pack, ok.pid));
+  };
+
+  buyBtn.onclick = ()=>{
+    const ok = validate();
+    if(!ok) return;
+    window.open(tgLink(makeMessage(ok.pack, ok.pid)), "_blank", "noopener");
+  };
+
+  // 1-e’lonni toast qilib chiqaramiz
+  if(ANNOUNCEMENTS.length){
+    toast(ANNOUNCEMENTS[0].title, ANNOUNCEMENTS[0].text);
+  }
+
+  render();
+</script>
+</body>
+</html>
