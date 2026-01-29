@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Admin Panel — Blood Strike</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#121a33;
+      --text:#e9ecff;
+      --muted:#a9b0d6;
+      --line:rgba(255,255,255,.10);
+      --accent:#ff4bd6;
+      --accent2:#31d6ff;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 10% 0%, rgba(255,75,214,.20), transparent 55%),
+                  radial-gradient(1000px 700px at 90% 0%, rgba(49,214,255,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      padding:18px;
+    }
+    .wrap{max-width:860px;margin:0 auto;}
+    .card{
+      background: rgba(18,26,51,.90);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    h1{margin:0 0 6px;font-size:18px}
+    .sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+    input,button{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(10,16,34,.55);
+      color: var(--text);
+      outline:none;
+    }
+    button{cursor:pointer;font-weight:900}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btnOk{
+      background: linear-gradient(135deg, rgba(255,75,214,.92), rgba(49,214,255,.88));
+      border:none;
+      color:#071025;
+    }
+    .btnGhost{
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      font-size:13px;
+      color:var(--muted);
+    }
+    .dot{width:10px;height:10px;border-radius:99px;background:#2de38c;box-shadow:0 0 0 6px rgba(45,227,140,.12)}
+    .sep{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
+    .msg{color:var(--muted);font-size:13px;margin-top:10px;line-height:1.4}
+    .small{font-size:12px;color:var(--muted)}
+    .warn{color:#ffcc66}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>🔐 Admin Panel</h1>
+      <p class="sub">Login qiling → kim online bo‘lsa shuni tanlaysiz. (Admin1: SULTSH_YT, Admin2: dilshodbs1031)</p>
+
+      <div id="loginBox">
+        <input id="email" type="email" placeholder="Email" autocomplete="username">
+        <div style="height:10px"></div>
+        <input id="pass" type="password" placeholder="Parol" autocomplete="current-password">
+        <div style="height:10px"></div>
+        <button class="btnOk" id="loginBtn">Kirish</button>
+        <p class="msg" id="loginMsg"></p>
+        <p class="small warn">Eslatma: bu sahifani faqat adminlarga bering.</p>
+      </div>
+
+      <div id="panelBox" style="display:none;">
+        <div class="pill" style="margin-bottom:12px;">
+          <span class="dot"></span>
+          <span>Hozirgi online: <b id="activeNow" style="color:#e9ecff">—</b></span>
+        </div>
+
+        <div class="row">
+          <button class="btnOk" id="setA1">✅ Admin 1 ONLINE (SULTSH_YT)</button>
+          <button class="btnOk" id="setA2">✅ Admin 2 ONLINE (dilshodbs1031)</button>
+        </div>
+
+        <div class="sep"></div>
+
+        <button class="btnGhost" id="logoutBtn">Chiqish</button>
+        <p class="msg" id="msg"></p>
+
+        <p class="small" style="margin-top:10px;">
+          ✅ Tanlasangiz — mijozlar “Sotib olish” bosganda shu admin Telegramiga yo‘naltiriladi.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    // ✅ Sening firebaseConfig
+    const firebaseConfig = {
+      apiKey: "AIzaSyBKhvdPBHC0Ml7d4-lJs_31jkrvPxpX6BM",
+      authDomain: "bloodstrike-aec49.firebaseapp.com",
+      projectId: "bloodstrike-aec49",
+      storageBucket: "bloodstrike-aec49.firebasestorage.app",
+      messagingSenderId: "972640427859",
+      appId: "1:972640427859:web:af1c051b6f4da4825acb
