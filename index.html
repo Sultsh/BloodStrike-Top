@@ -1,237 +1,976 @@
 <!doctype html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blood Strike Donat</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Blood Strike — SULTSH</title>
+  <meta name="description" content="Blood Strike uchun donat."/>
 
-<style>
-:root{
- --bg:#0b1020; --card:#121a33; --text:#e9ecff; --muted:#a9b0d6;
- --line:rgba(255,255,255,.08); --accent:#ff4bd6; --accent2:#31d6ff;
- --ok:#2de38c; --danger:#ff6b6b; --radius:18px;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui;background:var(--bg);color:var(--text)}
-.container{width:min(1100px,92vw);margin:24px auto}
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#121a33;
+      --card2:#0f1630;
+      --text:#e9ecff;
+      --muted:#a9b0d6;
+      --line:rgba(255,255,255,.08);
+      --accent:#ff4bd6;
+      --accent2:#31d6ff;
+      --ok:#2de38c;
+      --warn:#ffcc66;
+      --danger:#ff6b6b;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 10% 0%, rgba(255,75,214,.20), transparent 55%),
+                  radial-gradient(1000px 700px at 90% 0%, rgba(49,214,255,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .container{
+      width:min(1080px, 92vw);
+      margin: 26px auto 80px;
+    }
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: var(--shadow);
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+    .logo img{width:100%;height:100%;object-fit:contain;display:block}
+    .brand h1{margin:0;font-size:18px; line-height:1.2}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
 
-header{display:flex;justify-content:space-between;align-items:center}
-.brand{display:flex;gap:12px;align-items:center}
-.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;overflow:hidden}
-.logo img{width:100%;height:100%;object-fit:contain}
+    .top-actions{display:flex; gap:10px; align-items:center;}
+    .btn{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      transition:.18s;
+      user-select:none;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.16)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,75,214,.92), rgba(49,214,255,.88));
+      border: none;
+      color:#071025;
+      font-weight:800;
+    }
 
-.btn{border:1px solid var(--line);background:#1a2344;color:#fff;padding:10px 12px;border-radius:14px;cursor:pointer}
-.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:0;color:#071025;font-weight:800}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:16px;
+      margin-top:12px;
+    }
+    @media (max-width: 880px){
+      .grid{grid-template-columns:1fr}
+      .top-actions{flex-wrap:wrap; justify-content:flex-end}
+    }
 
-.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+    .card{
+      background: rgba(18,26,51,.86);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .head{
+      padding:16px 16px 12px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), transparent);
+    }
+    .card .head h2{margin:0 0 6px;font-size:15px}
+    .card .head .sub{color:var(--muted); font-size:13px}
 
-.list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.item{border:1px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;display:flex;gap:10px;align-items:center}
-.item.active{outline:2px solid var(--accent2)}
-.pack-ico{width:36px;height:36px;border-radius:10px;background:#0f1630;padding:5px}
+    .filters{
+      padding:12px 16px 14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .pill{
+      border:1px solid var(--line);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+      cursor:pointer;
+      background: rgba(255,255,255,.03);
+      transition:.18s;
+    }
+    .pill.active{
+      color: var(--text);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.06);
+    }
+    .search{
+      flex:1;
+      min-width:180px;
+      border:1px solid var(--line);
+      background: rgba(10,16,34,.55);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      outline:none;
+    }
+    .search::placeholder{color:rgba(233,236,255,.45)}
 
-.input{width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);background:#0f1630;color:#fff}
-.input.err{border-color:var(--danger);box-shadow:0 0 0 3px rgba(255,0,0,.2)}
+    .list{
+      padding: 0 12px 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 620px){
+      .list{grid-template-columns:1fr}
+    }
 
-.cardPay{
- border-radius:16px;padding:16px;
- background:linear-gradient(135deg,#1f2a55,#0f1630);
- border:1px solid var(--line);
-}
-.cardNum{font-size:18px;letter-spacing:2px;margin:10px 0;font-weight:900}
+    .item{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(15,22,48,.60);
+      padding: 12px;
+      cursor:pointer;
+      transition:.18s;
+      position:relative;
+      overflow:hidden;
 
-.payTabs{display:flex;gap:8px;margin-top:12px}
-.payTab{flex:1;border:1px solid var(--line);padding:8px;border-radius:12px;text-align:center;cursor:pointer}
-.payTab.active{outline:2px solid var(--accent2)}
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .item:hover{transform: translateY(-2px); border-color: rgba(255,255,255,.18)}
+    .item.active{outline:2px solid rgba(49,214,255,.55); border-color: transparent}
 
-.small{font-size:12px;color:var(--muted)}
-</style>
+    .pack-ico{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      object-fit:contain;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding:5px;
+      flex:0 0 auto;
+    }
+    .item .content{min-width:0; flex:1;}
+    .item .title{font-weight:900; margin:0 0 6px; font-size:14px}
+    .item .meta{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .tag{
+      font-size:12px;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+
+    .priceWrap{
+      margin-left:auto;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:4px;
+      flex:0 0 auto;
+    }
+    .priceNow{font-weight:950; color:#fff}
+    .priceOld{
+      font-size:12px;
+      color: rgba(233,236,255,.55);
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(255,107,107,.85);
+    }
+
+    .badge{
+      position:absolute; top:10px; right:10px;
+      font-size:11px; font-weight:900;
+      padding:6px 8px;
+      border-radius:999px;
+      background: rgba(45,227,140,.14);
+      border:1px solid rgba(45,227,140,.30);
+      color: var(--ok);
+      display:none;
+    }
+    .item.hasSale .badge{display:inline-flex}
+
+    .side{padding: 14px 16px 16px;}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:10px;}
+    .input{
+      width:100%;
+      border:1px solid var(--line);
+      background: rgba(10,16,34,.55);
+      color: var(--text);
+      padding: 12px 12px;
+      border-radius: 14px;
+      outline:none;
+      transition: .18s;
+    }
+    .input::placeholder{color:rgba(233,236,255,.45)}
+
+    /* ✅ ID error highlight */
+    .input.err{
+      border-color: rgba(255,107,107,.85) !important;
+      box-shadow: 0 0 0 4px rgba(255,107,107,.12);
+      animation: shake .28s ease-in-out 0s 1;
+    }
+    @keyframes shake{
+      0%,100%{transform:translateX(0)}
+      25%{transform:translateX(-5px)}
+      75%{transform:translateX(5px)}
+    }
+
+    .hint{color:var(--muted); font-size:12px; margin-top:8px; line-height:1.45}
+
+    .summary{
+      margin-top:12px;
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+      border-radius: 16px;
+    }
+    .summary .k{color:var(--muted); font-size:12px}
+    .summary .v{font-weight:950; margin-top:3px}
+    .summary .row2{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:8px;
+      flex-wrap:wrap;
+    }
+    .summary .prices{
+      display:flex;
+      gap:10px;
+      align-items:baseline;
+      justify-content:flex-end;
+      margin-left:auto;
+    }
+    .summary .old{
+      color: rgba(233,236,255,.55);
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(255,107,107,.85);
+      font-size:12px;
+      font-weight:800;
+    }
+    .summary .now{font-weight:950}
+
+    .cta{display:flex; gap:10px; margin-top:12px;}
+    .cta .btn{flex:1; padding:12px 12px; border-radius:16px}
+    .mini{
+      margin-top:12px;
+      color: var(--muted);
+      font-size:12px;
+      border-top:1px solid var(--line);
+      padding-top:12px;
+      line-height:1.45;
+    }
+    .mini b{color:var(--text)}
+    .footer{margin-top:14px; color: var(--muted); font-size:12px; text-align:center;}
+
+    /* Toast */
+    .toastWrap{
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(720px, 94vw);
+      z-index: 9999;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      border-radius: 18px;
+      padding: 12px 12px;
+      background: rgba(18,26,51,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      transform: translateY(-18px);
+      opacity: 0;
+      transition: .25s;
+    }
+    .toast.show{transform: translateY(0); opacity:1}
+    .toast .dot{
+      width:10px;height:10px;border-radius:99px;margin-top:4px;
+      background: var(--warn);
+      box-shadow: 0 0 0 6px rgba(255,204,102,.12);
+    }
+    .toast .content{flex:1}
+    .toast .title{font-weight:950; font-size:13px; margin:0 0 3px}
+    .toast .msg{margin:0; color: var(--muted); font-size:13px; line-height:1.35}
+    .toast .x{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+    }
+
+    /* Bell panel */
+    .panel{
+      position: fixed;
+      top: 68px;
+      right: calc((100vw - min(1080px, 92vw))/2);
+      width: min(440px, 92vw);
+      background: rgba(18,26,51,.96);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      padding: 10px;
+      display:none;
+      z-index: 9998;
+    }
+    @media (max-width: 1080px){ .panel{right: 4vw;} }
+    .panel.show{display:block}
+    .panel h3{margin:8px 10px 6px; font-size:14px}
+    .panel .sub2{margin:0 10px 8px; color:var(--muted); font-size:12px}
+    .note{
+      border:1px solid var(--line);
+      background: rgba(15,22,48,.55);
+      padding:10px;
+      border-radius: 14px;
+      margin: 8px;
+    }
+    .note .t{font-weight:900; font-size:13px; margin:0 0 4px}
+    .note .d{margin:0; color: var(--muted); font-size:12px; line-height:1.35}
+
+    /* ✅ Admin modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 10000;
+      padding: 16px;
+    }
+    .modalBack.show{display:flex}
+    .modal{
+      width:min(520px, 96vw);
+      background: rgba(18,26,51,.96);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .modalHead b{font-size:14px}
+    .modalBody{padding: 14px;}
+    .modalRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+    .modalHint{color:var(--muted); font-size:12px; line-height:1.45; margin-top:8px;}
+    .smallStatus{
+      margin-top:10px;
+      padding:10px;
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      font-size:12px;
+      color: var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .okdot{color:var(--ok); font-weight:900}
+  </style>
 </head>
 
 <body>
-<div class="container">
+  <div class="toastWrap" id="toastWrap" aria-live="polite"></div>
 
-<header>
-<div class="brand">
-<div class="logo"><img src="assets/img/bloodstrike.png"></div>
-<div><b>Blood Strike</b><div class="small">Donat</div></div>
-</div>
-<div style="display:flex;gap:8px">
-<button class="btn" id="adminBtn">🔐 Admin</button>
-</div>
-</header>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">
+          <img src="assets/img/bloodstrike.png" alt="Blood Strike">
+        </div>
+        <div>
+          <h1>Blood Strike</h1>
+          <p>Narxlar</p>
+        </div>
+      </div>
 
-<div class="grid">
+      <div class="top-actions">
+        <button class="btn" id="bellBtn" title="E'lonlar">🔔 E’lonlar</button>
+        <button class="btn" id="adminBtn" title="Admin">🔐 Admin</button>
+        <a class="btn primary" href="https://t.me/SULTSH_GAMING" target="_blank" rel="noopener">Telegram Group</a>
+      </div>
+    </header>
 
-<!-- LEFT -->
-<div class="card">
-<b>Paketlar</b>
-<div class="list" id="list"></div>
-</div>
+    <div class="panel" id="panel">
+      <h3>🔔 E’lonlar</h3>
+      <p class="sub2">Yangi e’lonlar shu yerda chiqadi.</p>
+      <div id="announceList"></div>
 
-<!-- RIGHT -->
-<div class="card">
-<b>Buyurtma</b>
+      <div class="note">
+        <p class="t">📌 Ishlash tartibi</p>
+        <p class="d">Paket tanlang → ID kiriting → “Sotib olish” → Telegram’da tayyor xabar ochiladi.</p>
+      </div>
+    </div>
 
-<div style="margin-top:10px" class="small">O'yin ID</div>
-<input id="pid" class="input">
+    <div class="grid">
+      <!-- Left -->
+      <section class="card">
+        <div class="head">
+          <h2>📦 Paketlar</h2>
+          <div class="sub">Paketni bosing. O‘ng tomonda buyurtma tayyorlanadi.</div>
+        </div>
 
-<div id="summary" style="margin-top:12px"></div>
+        <div class="filters">
+          <input class="search" id="search" placeholder="Qidirish: 500, pass, case..." />
+          <span class="pill active" data-cat="all">Hammasi</span>
+          <span class="pill" data-cat="gold">Gold</span>
+          <span class="pill" data-cat="pass">Strike Pass</span>
+          <span class="pill" data-cat="case">Case / Skin</span>
+        </div>
 
-<!-- 💳 PAY BLOCK -->
-<div style="margin-top:16px">
-<b>To'lov usuli</b>
+        <div class="list" id="list"></div>
+      </section>
 
-<div class="payTabs">
-<div class="payTab active" data-pay="me">Mening karta</div>
-<div class="payTab" data-pay="friend">Sherik karta</div>
-</div>
+      <!-- Right -->
+      <aside class="card">
+        <div class="head">
+          <h2>🛒 Buyurtma</h2>
+          <div class="sub">ID kiriting va Telegram’dan yozing.</div>
+        </div>
 
-<div id="cardBox" class="cardPay" style="margin-top:10px"></div>
-</div>
+        <div class="side">
+          <label for="playerId" style="font-size:12px;color:var(--muted);">O‘yin ID (majburiy)</label>
+          <input class="input" id="playerId" placeholder="Masalan: 1234567890" inputmode="numeric" />
 
-<div style="display:flex;gap:10px;margin-top:14px">
-<button id="copyCard" class="btn">📋 Copy karta</button>
-<button id="buy" class="btn primary">Sotib olish</button>
-</div>
+          <div class="row">
+            <label style="display:flex; gap:8px; align-items:center; font-size:12px; color:var(--muted);">
+              <input type="checkbox" id="keepId" />
+              ID’ni eslab qolish (shu brauzerda)
+            </label>
+          </div>
 
-</div>
-</div>
-</div>
+          <div class="summary" id="summary">
+            <div class="k">Tanlangan paket</div>
+            <div class="v" id="selName">Hech narsa tanlanmadi</div>
 
+            <div class="row2">
+              <span class="tag" id="selCat">—</span>
+
+              <div class="prices">
+                <span class="old" id="selOld" style="display:none;">—</span>
+                <span class="now" id="selNow">—</span>
+              </div>
+            </div>
+
+            <div class="hint" id="selHint">Chap tomondan paket tanlang.</div>
+          </div>
+
+          <div class="cta">
+            <button class="btn" id="copyBtn">📋 Matnni nusxa</button>
+            <button class="btn primary" id="buyBtn">Sotib olish</button>
+          </div>
+
+          <div class="mini">
+            <b>Eslatma:</b> Bu sayt to‘lov qabul qilmaydi — faqat Telegram orqali buyurtma ochadi.
+            <br>Chegirma bo‘lgan paketlarda <b>AKSIYA</b> va eski narx ustidan chizilgan ko‘rinadi.
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">© SULTSH — Blood Strike Donat</div>
+  </div>
+
+  <!-- ✅ Admin Modal -->
+  <div class="modalBack" id="adminModal">
+    <div class="modal">
+      <div class="modalHead">
+        <b>🔐 Admin panel</b>
+        <button class="btn" id="adminClose">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <!-- Login block -->
+        <div id="loginBlock">
+          <div style="font-size:12px;color:var(--muted);">Email</div>
+          <input class="input" id="adminEmail" placeholder="admin@email.com" />
+          <div style="font-size:12px;color:var(--muted); margin-top:10px;">Password</div>
+          <input class="input" id="adminPass" type="password" placeholder="******" />
+
+          <div class="modalRow">
+            <button class="btn primary" id="loginBtn">Kirish</button>
+          </div>
+          <div class="modalHint">
+            Firebase → Authentication → Email/Password’ni yoqing va admin user yarating.
+          </div>
+        </div>
+
+        <!-- Panel block -->
+        <div id="panelBlock" style="display:none;">
+          <div class="smallStatus">
+            <span>Hozir yo‘naltirish:</span>
+            <span><span class="okdot">●</span> <b id="whoActive">—</b></span>
+          </div>
+
+          <div class="modalRow">
+            <button class="btn" id="setAdmin1">🟢 Men online (SULTSH)</button>
+            <button class="btn" id="setAdmin2">🟣 Sherigim online (Dilshod)</button>
+          </div>
+
+          <div class="modalRow">
+            <button class="btn" id="logoutBtn">Chiqish</button>
+          </div>
+
+          <div class="modalHint">
+            Bu holat Firebase’ga yoziladi va “Sotib olish” kutmasdan shu yo‘naltirish bilan ishlaydi.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- ✅ Firebase + App logic -->
 <script type="module">
+  // ====== FIREBASE (modular CDN) ======
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ========= FIREBASE ========= */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyBKhvdPBHC0Ml7d4-lJs_31jkrvPxpX6BM",
+    authDomain: "bloodstrike-aec49.firebaseapp.com",
+    projectId: "bloodstrike-aec49",
+    storageBucket: "bloodstrike-aec49.firebasestorage.app",
+    messagingSenderId: "972640427859",
+    appId: "1:972640427859:web:af1c051b6f4da4825acba6",
+    measurementId: "G-8PZZFXHJXS"
+  };
 
-const firebaseConfig = {
- apiKey:"AIzaSyBKhvdPBHC0Ml7d4-lJs_31jkrvPxpX6BM",
- authDomain:"bloodstrike-aec49.firebaseapp.com",
- projectId:"bloodstrike-aec49",
- appId:"1:972640427859:web:af1c051b6f4da4825acba6"
-};
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  // ====== SETTINGS ======
+  const DEFAULT_ADMIN = "admin1"; // agar firebase ulanmasa ham ishlaydi
+  const ADMIN_MAP = {
+    admin1: "SULTSH_YT",
+    admin2: "dilshodbs1031",
+  };
 
-/* ========= ADMIN ROUTING ========= */
+  // 🔔 E'lonlar
+  const ANNOUNCEMENTS = [
+    { title: "🔥 Aksiya", text: "Bugun 500+40 va 1000+100 GOLD chegirmada! Ulgurib qoling." },
+    { title: "⏰ Ish vaqti", text: "Har kuni 09:00 – 23:00. Buyurtmalar tez yetkaziladi." },
+    { title: "⚠️ Eslatma", text: "To‘lovdan keyin chek (skrin) yuboring." },
+  ];
 
-const ADMIN_MAP = {
- admin1:"SULTSH_YT",
- admin2:"dilshodbs1031"
-};
+  const IMG = "assets/img/";
+  const FALLBACK_ICON = IMG + "bloodstrike.png";
 
-let cachedAdmin="admin1";
+  const PACKS = [
+    { id:"g100",  cat:"gold", title:" 100 + 5 Gold",    price:"9.999 uzs",   icon: IMG+"gold-100.png",  sale:false },
+    { id:"g300",  cat:"gold", title:" 300 + 15 Gold",   price:"29.999 uzs",  icon: IMG+"gold-300.png",  sale:false },
 
-onSnapshot(doc(db,"settings","main"), snap=>{
- if(snap.exists()){
-   cachedAdmin = snap.data().activeAdmin || "admin1";
- }
-});
+    { id:"g500",  cat:"gold", title:" 500 + 40 Gold",   price:"44.999 uzs",  oldPrice:"49.999 uzs", icon: IMG+"gold-500.png",  sale:true  },
+    { id:"g1000", cat:"gold", title:" 1000 + 100 Gold", price:"89.999 uzs",  oldPrice:"99.999 uzs", icon: IMG+"gold-1000.png", sale:true  },
 
-/* ========= CARDS ========= */
+    { id:"g2000", cat:"gold", title:" 2000 + 260 Gold", price:"179.999 uzs", oldPrice:"200.000 uzs", icon: IMG+"gold-2000.png", sale:true },
+    { id:"g5000", cat:"gold", title:" 5000 + 800 Gold", price:"464.999 uzs", oldPrice:"500.000 uzs", icon: IMG+"gold-5000.png", sale:true },
 
-const CARDS = {
- me:{
-  humo:"5614687304943229",
-  phone:"+998995467410"
- },
- friend:{
-  uzcard:"5614681816455285",
-  humo:"9860100124515832",
-  phone:"+998906282228"
- }
-};
+    { id:"pe",  cat:"pass", title:" Pass Elite ",   price:"42.000 uzs",  icon: IMG+"pass-elite.png",   sale:true },
+    { id:"pp",  cat:"pass", title:" Pass Premium ", price:"94.999 uzs",  icon: IMG+"pass-premium.png", sale:true },
+    { id:"lup", cat:"pass", title:" LEVEL UP PASS", price:"25.000 uzs",  icon: IMG+"pass-levelup.png", sale:false },
 
-let payMode="me";
+    { id:"case1",   cat:"case", title:" Ultra Qurol Case",       price:"7.000 uzs",   icon: IMG+"luck_bag.png", sale:false },
+    { id:"coupon10",cat:"case", title:" Enternal Skin 10x Kupon", price:"25.000 uzs",  icon: IMG+"coupon-10x.png", sale:false },
+    { id:"skin099", cat:"case", title:" 0.99$ Ultra Skin",        price:"13.000 uzs",  icon: IMG+"skin-099.png", sale:false },
+  ];
 
-/* ========= PACKS ========= */
+  // ====== STATE ======
+  let activeCat = "all";
+  let activeId = null;
 
-const PACKS=[
-{id:"g100",title:"100 + 5 Gold",price:"9.999"},
-{id:"g500",title:"500 + 40 Gold",price:"44.999"},
-{id:"g1000",title:"1000 + 100 Gold",price:"89.999"}
-];
+  // ✅ cache (Sotib olish hech qachon kutmaydi)
+  let cachedActiveAdminKey = DEFAULT_ADMIN; // admin1/admin2
+  let cachedTelegramUsername = ADMIN_MAP[cachedActiveAdminKey];
 
-let active=null;
+  // ====== DOM ======
+  const $ = (s)=>document.querySelector(s);
 
-const list=document.getElementById("list");
-PACKS.forEach(p=>{
- const d=document.createElement("div");
- d.className="item";
- d.innerHTML=`<img class="pack-ico" src="assets/img/gold-100.png"><div>${p.title}<br><b>${p.price}</b></div>`;
- d.onclick=()=>{active=p;document.querySelectorAll(".item").forEach(x=>x.classList.remove("active"));d.classList.add("active");updateSummary();}
- list.appendChild(d);
-});
+  const listEl = $("#list");
+  const searchEl = $("#search");
+  const bellBtn = $("#bellBtn");
+  const panel = $("#panel");
+  const announceListEl = $("#announceList");
 
-/* ========= PAY UI ========= */
+  const selName = $("#selName");
+  const selCat = $("#selCat");
+  const selOld = $("#selOld");
+  const selNow = $("#selNow");
+  const selHint = $("#selHint");
+  const playerIdEl = $("#playerId");
+  const keepIdEl = $("#keepId");
 
-document.querySelectorAll(".payTab").forEach(t=>{
- t.onclick=()=>{
-  document.querySelectorAll(".payTab").forEach(x=>x.classList.remove("active"));
-  t.classList.add("active");
-  payMode=t.dataset.pay;
-  renderCard();
- };
-});
+  const copyBtn = $("#copyBtn");
+  const buyBtn = $("#buyBtn");
 
-function renderCard(){
- const box=document.getElementById("cardBox");
- if(payMode==="me"){
-   box.innerHTML=`<div>HUMO</div><div class="cardNum">${CARDS.me.humo}</div><div class="small">${CARDS.me.phone}</div>`;
- }else{
-   box.innerHTML=`<div>UZCARD</div><div class="cardNum">${CARDS.friend.uzcard}</div>
-                  <div>HUMO</div><div class="cardNum">${CARDS.friend.humo}</div>
-                  <div class="small">${CARDS.friend.phone}</div>`;
- }
-}
-renderCard();
+  // Admin modal
+  const adminBtn = $("#adminBtn");
+  const adminModal = $("#adminModal");
+  const adminClose = $("#adminClose");
 
-/* ========= SUMMARY ========= */
+  const loginBlock = $("#loginBlock");
+  const panelBlock = $("#panelBlock");
+  const adminEmail = $("#adminEmail");
+  const adminPass = $("#adminPass");
+  const loginBtn = $("#loginBtn");
+  const logoutBtn = $("#logoutBtn");
+  const setAdmin1 = $("#setAdmin1");
+  const setAdmin2 = $("#setAdmin2");
+  const whoActive = $("#whoActive");
 
-function updateSummary(){
- if(!active) return;
- document.getElementById("summary").innerHTML=
- `<b>${active.title}</b><br>${active.price} uzs`;
-}
+  function catLabel(cat){
+    if(cat==="gold") return "Gold";
+    if(cat==="pass") return "Strike Pass";
+    if(cat==="case") return "Case / Skin";
+    return "—";
+  }
 
-/* ========= BUY ========= */
+  function safeTextEncode(str){ return encodeURIComponent(str); }
 
-document.getElementById("buy").onclick=()=>{
- if(!active) return alert("Paket tanla");
- const pid=document.getElementById("pid");
- if(pid.value.length<5){
-   pid.classList.add("err");
-   setTimeout(()=>pid.classList.remove("err"),900);
-   return;
- }
+  function makeMessage(pack, playerId){
+    const packName = pack.title.trim();
+    const saleLine = (pack.sale && pack.oldPrice) ? \nChegirma: ${pack.oldPrice} → ${pack.price} : "";
+    return Salom! Men ${packName} olmoqchiman.\nNarx: ${pack.price}${saleLine}\nID: ${playerId}\n;
+  }
 
- const tg=ADMIN_MAP[cachedAdmin];
+  function tgLink(username, message){
+    return https://t.me/${username}?text=${safeTextEncode(message)};
+  }
 
- const cardText = payMode==="me"
-   ? CARDS.me.humo
-   : CARDS.friend.uzcard;
+  function toast(title, msg){
+    const wrap = $("#toastWrap");
+    wrap.innerHTML = 
+      <div class="toast show" id="toast">
+        <div class="dot"></div>
+        <div class="content">
+          <p class="title">${title}</p>
+          <p class="msg">${msg}</p>
+        </div>
+        <button class="x" id="toastClose">✕</button>
+      </div>
+    ;
+    $("#toastClose").onclick = ()=> wrap.innerHTML="";
+    setTimeout(()=>{ wrap.innerHTML=""; }, 7000);
+  }
 
- const msg=`Salom men ${active.title} olmoqchiman
-Narx: ${active.price}
-ID: ${pid.value}
-Karta: ${cardText}`;
+  function renderAnnouncements(){
+    announceListEl.innerHTML = ANNOUNCEMENTS.map(a => 
+      <div class="note">
+        <p class="t">${a.title}</p>
+        <p class="d">${a.text}</p>
+      </div>
+    ).join("");
+  }
 
- window.open(`https://t.me/${tg}?text=`+encodeURIComponent(msg));
-};
+  function render(){
+    const q = (searchEl.value || "").toLowerCase().trim();
 
-/* ========= COPY CARD ========= */
+    const filtered = PACKS.filter(p=>{
+      const byCat = (activeCat==="all") || (p.cat===activeCat);
+      const bySearch = !q || (p.title.toLowerCase().includes(q) || p.price.toLowerCase().includes(q));
+      return byCat && bySearch;
+    });
 
-document.getElementById("copyCard").onclick=()=>{
- const text = payMode==="me" ? CARDS.me.humo : CARDS.friend.uzcard;
- navigator.clipboard.writeText(text);
- alert("Karta nusxalandi");
-};
+    listEl.innerHTML = filtered.map(p=>{
+      const active = (p.id===activeId) ? "active" : "";
+      const saleClass = p.sale ? "hasSale" : "";
+      const icon = p.icon || FALLBACK_ICON;
 
+      const oldPriceHtml = (p.sale && p.oldPrice)
+        ? <span class="priceOld">${p.oldPrice}</span>
+        : `;
+
+      return 
+        <div class="item ${active} ${saleClass}" data-id="${p.id}">
+          <div class="badge">AKSIYA</div>
+          <img class="pack-ico" src="${icon}" alt="">
+          <div class="content">
+            <p class="title">${p.title}</p>
+            <div class="meta">
+              <span class="tag">${catLabel(p.cat)}</span>
+              <div class="priceWrap">
+                ${oldPriceHtml}
+                <span class="priceNow">${p.price}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ;
+    }).join("");
+
+    [...document.querySelectorAll(".item")].forEach(el=>{
+      el.onclick = ()=>{
+        activeId = el.getAttribute("data-id");
+        updateSummary();
+        render();
+      };
+    });
+  }
+
+  function updateSummary(){
+    const pack = PACKS.find(p=>p.id===activeId);
+    if(!pack){
+      selName.textContent = "Hech narsa tanlanmadi";
+      selCat.textContent = "—";
+      selNow.textContent = "—";
+      selOld.style.display = "none";
+      selHint.textContent = "Chap tomondan paket tanlang.";
+      return;
+    }
+    selName.textContent = pack.title;
+    selCat.textContent = catLabel(pack.cat);
+    selNow.textContent = pack.price;
+
+    if(pack.sale && pack.oldPrice){
+      selOld.textContent = pack.oldPrice;
+      selOld.style.display = "inline";
+      selHint.textContent = "Aksiya bor — tezroq ulgurib qoling.";
+    } else {
+      selOld.style.display = "none";
+      selHint.textContent = "Buyurtma uchun ID kiriting.";
+    }
+  }
+
+  function getPlayerId(){ return (playerIdEl.value || "").trim(); }
+
+  function validate(){
+    const pack = PACKS.find(p=>p.id===activeId);
+    const pid = getPlayerId();
+
+    // paket yo‘q
+    if(!pack){
+      toast("Paket tanlanmadi", "Chap tomondan paketni bosing.");
+      return null;
+    }
+
+    // ID yo‘q -> qizil highlight + toast
+    if(!pid || pid.length < 5){
+      toast("ID kerak", "O‘yin ID’ingizni kiriting (kamida 5 ta belgi).");
+
+      playerIdEl.classList.add("err");
+      playerIdEl.focus();
+      setTimeout(()=>playerIdEl.classList.remove("err"), 900);
+      return null;
+    }
+
+    return {pack, pid};
+  }
+
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      toast("Nusxalandi ✅", "Matn nusxalandi.");
+    }catch(e){
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      toast("Nusxalandi ✅", "Matn nusxalandi.");
+    }
+  }
+
+  // ====== FIRESTORE: activeAdmin ni oldindan olib turamiz (kutish yo‘q) ======
+  async function initAdminRouting(){
+    // settings/main document
+    const ref = doc(db, "settings", "main");
+
+    // 1) tezda bir marta o‘qib olamiz (fallback uchun)
+    try{
+      const snap = await getDoc(ref);
+      if(snap.exists()){
+        const d = snap.data();
+        if(d.activeAdmin && ADMIN_MAP[d.activeAdmin]){
+          cachedActiveAdminKey = d.activeAdmin;
+          cachedTelegramUsername = ADMIN_MAP[cachedActiveAdminKey];
+          whoActive.textContent = (cachedActiveAdminKey==="admin1") ? "SULTSH (@SULTSH_YT)" : "Dilshod (@dilshodbs1031)";
+        }
+      }
+    }catch(e){
+      // internet bo‘lmasa ham DEFAULT_ADMIN bilan ishlayveradi
+    }
+
+    // 2) real-time listener (tez va doim yangilanadi)
+    try{
+      onSnapshot(ref, (snap)=>{
+        if(!snap.exists()) return;
+        const d = snap.data();
+        if(d.activeAdmin && ADMIN_MAP[d.activeAdmin]){
+          cachedActiveAdminKey = d.activeAdmin;
+          cachedTelegramUsername = ADMIN_MAP[cachedActiveAdminKey];
+          whoActive.textContent = (cachedActiveAdminKey==="admin1") ? "SULTSH (@SULTSH_YT)" : "Dilshod (@dilshodbs1031)";
+        }
+      });
+    }catch(e){
+      // listener ishlamasa ham muammo emas
+    }
+  }
+
+  async function setActiveAdmin(key){
+    const ref = doc(db, "settings", "main");
+    await setDoc(ref, { activeAdmin: key }, { merge:true });
+    toast("Saqlanndi ✅", key==="admin1" ? "Endi buyurtmalar SULTSH’ga yo‘naltiriladi." : "Endi buyurtmalar Dilshod’ga yo‘naltiriladi.");
+  }
+
+  // ====== AUTH UI ======
+  function openAdmin(){ adminModal.classList.add("show"); }
+  function closeAdmin(){ adminModal.classList.remove("show"); }
+
+  adminBtn.onclick = openAdmin;
+  adminClose.onclick = closeAdmin;
+  adminModal.addEventListener("click", (e)=>{
+    if(e.target === adminModal) closeAdmin();
+  });
+
+  loginBtn.onclick = async ()=>{
+    const email = (adminEmail.value || "").trim();
+    const pass = (adminPass.value || "").trim();
+    if(!email || !pass){
+      toast("Login kerak", "Email va password kiriting.");
+      return;
+    }
+    try{
+      await signInWithEmailAndPassword(auth, email, pass);
+      toast("Kirdingiz ✅", "Admin panel ochildi.");
+    }catch(e){
+      toast("Xato", "Login yoki password noto‘g‘ri (yoki Auth yoqilmagan).");
+    }
+  };
+
+  logoutBtn.onclick = async ()=>{
+    await signOut(auth);
+    toast("Chiqildi", "Admin rejimdan chiqildi.");
+  };
+
+  setAdmin1.onclick = ()=> setActiveAdmin("admin1");
+  setAdmin2.onclick = ()=> setActiveAdmin("admin2");
+
+  onAuthStateChanged(auth, (user)=>{
+    if(user){
+      loginBlock.style.display = "none";
+      panelBlock.style.display = "block";
+    }else{
+      loginBlock.style.display = "block";
+      panelBlock.style.display = "none";
+    }
+  });
+
+  // ====== INIT ======
+  renderAnnouncements();
+
+  const bellBtn2 = bellBtn;
+  bellBtn2.onclick = ()=>{ panel.classList.toggle("show"); };
+  document.addEventListener("click", (e)=>{
+    if(!panel.contains(e.target) && e.target !== bellBtn2){
+      panel.classList.remove("show");
+    }
+  });
+
+  [...document.querySelectorAll(".pill")].forEach(p=>{
+    p.onclick = ()=>{
+      [...document.querySelectorAll(".pill")].forEach(x=>x.classList.remove("active"));
+      p.classList.add("active");
+      activeCat = p.getAttribute("data-cat");
+      render();
+    };
+  });
+
+  searchEl.addEventListener("input", render);
+
+  // Saved ID
+  const saved = localStorage.getItem("bs_player_id");
+  if(saved){
+    playerIdEl.value = saved;
+    keepIdEl.checked = true;
+  }
+  keepIdEl.addEventListener("change", ()=>{
+    if(keepIdEl.checked){
+      localStorage.setItem("bs_player_id", getPlayerId());
+      toast("Eslab qolindi", "ID shu brauzerda saqlanadi.");
+    } else {
+      localStorage.removeItem("bs_player_id");
+      toast("O‘chirildi", "Saqlangan ID o‘chirildi.");
+    }
+  });
+  playerIdEl.addEventListener("input", ()=>{
+    // qizil holatni yozayotgan paytda o‘chirib boramiz
+    playerIdEl.classList.remove("err");
+    if(keepIdEl.checked){
+      localStorage.setItem("bs_player_id", getPlayerId());
+    }
+  });
+
+  copyBtn.onclick = ()=>{
+    const ok = validate();
+    if(!ok) return;
+    copyText(makeMessage(ok.pack, ok.pid));
+  };
+
+  buyBtn.onclick = ()=>{
+    const ok = validate();
+    if(!ok) return;
+
+    // ✅ Bu yerda endi HECH QANDAY await yo‘q — kutmaydi.
+    const username = cachedTelegramUsername || ADMIN_MAP[DEFAULT_ADMIN];
+    window.open(tgLink(username, makeMessage(ok.pack, ok.pid)), "_blank", "noopener");
+  };
+
+  // 1-e’lon toast
+  if(ANNOUNCEMENTS.length){
+    toast(ANNOUNCEMENTS[0].title, ANNOUNCEMENTS[0].text);
+  }
+
+  render();
+  updateSummary();
+
+  // 🔥 admin routing cache init
+  initAdminRouting();
 </script>
 </body>
 </html>
