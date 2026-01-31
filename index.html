@@ -410,6 +410,106 @@
       flex-wrap:wrap;
     }
     .okdot{color:var(--ok); font-weight:900}
+
+    /* ==========================================================
+       ✅ YANGI: KARTALAR BLOKI (Buyurtma pastida) — dizayn buzilmaydi
+       ========================================================== */
+    .payBlock{
+      margin-top:12px;
+      border-top:1px solid var(--line);
+      padding-top:12px;
+    }
+    .payHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .payHead .who{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .cardsGrid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+
+    /* Plastik karta ko‘rinishi */
+    .pCard{
+      position:relative;
+      border-radius:18px;
+      padding:14px 14px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(520px 240px at 12% 0%, rgba(255,75,214,.25), transparent 55%),
+        radial-gradient(520px 240px at 88% 0%, rgba(49,214,255,.22), transparent 55%),
+        rgba(15,22,48,.70);
+      overflow:hidden;
+      cursor:pointer;
+      transition:.18s;
+    }
+    .pCard:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.18)}
+    .pCard.active{outline:2px solid rgba(49,214,255,.55); border-color: transparent}
+
+    .pTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .pBrand{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight:950;
+      font-size:13px;
+    }
+    .pChip{
+      width:34px;height:26px;border-radius:8px;
+      background: linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,.08));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 8px 20px rgba(0,0,0,.25);
+    }
+    .pNum{
+      font-weight:950;
+      letter-spacing: 2px;
+      font-size:16px;
+      margin: 10px 0 8px;
+      text-shadow: 0 6px 20px rgba(0,0,0,.35);
+      word-spacing: 4px;
+    }
+    .pMeta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .pRadio{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .copyMini{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      padding:8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+    .copyMini:hover{border-color: rgba(255,255,255,.22)}
   </style>
 </head>
 
@@ -504,6 +604,23 @@
             <button class="btn primary" id="buyBtn">Sotib olish</button>
           </div>
 
+          <!-- ✅ YANGI: Kartalar bo‘limi (Admin tanlangan odam kartalari) -->
+          <div class="payBlock" id="payBlock">
+            <div class="payHead">
+              <div>
+                <div style="font-weight:950;">💳 To‘lov kartalari</div>
+                <div class="who" id="payOwner">—</div>
+              </div>
+              <div style="font-size:12px;color:var(--muted);">Kartani tanlang</div>
+            </div>
+
+            <div class="cardsGrid" id="cardsGrid"></div>
+
+            <div class="hint" style="margin-top:10px;">
+              Tanlangan karta “Sotib olish” bosilganda xabarga qo‘shiladi.
+            </div>
+          </div>
+
           <div class="mini">
             <b>Eslatma:</b> Bu sayt to‘lov qabul qilmaydi — faqat Telegram orqali buyurtma ochadi.
             <br>Chegirma bo‘lgan paketlarda <b>AKSIYA</b> va eski narx ustidan chizilgan ko‘rinadi.
@@ -547,7 +664,7 @@
           </div>
 
           <div class="modalRow">
-            <button class="btn" id="setAdmin1">🟢 Men online (SULTSH)</button>
+            <button class="btn" id="setAdmin1">🟢 Men online (Sultsh)</button>
             <button class="btn" id="setAdmin2">🟣 Sherigim online (Dilshod)</button>
           </div>
 
@@ -556,7 +673,7 @@
           </div>
 
           <div class="modalHint">
-            Bu holat Firebase’ga yoziladi va “Sotib olish” kutmasdan shu yo‘naltirish bilan ishlaydi.
+            Bu holat Firebase’ga yoziladi. Saytda kartalar va “Sotib olish” yo‘naltirishi shu holatga bog‘liq.
           </div>
         </div>
       </div>
@@ -589,6 +706,26 @@
   const ADMIN_MAP = {
     admin1: "SULTSH_YT",
     admin2: "dilshodbs1031",
+  };
+
+  // ✅ ADMIN KARTALARI (sen bergan real ma’lumotlar)
+  const ADMIN_PAYMENTS = {
+    admin1: {
+      ownerText: "Sultsh kartalari",
+      phone: "+998.99.546.74.10",
+      cards: [
+        { id:"a1_humo", label:"HUMO", number:"5614 6873 0494 3229" },
+        { id:"a1_visa", label:"VISA", number:"4916 9903 1325 5652" },
+      ]
+    },
+    admin2: {
+      ownerText: "Dilshod kartalari",
+      phone: "+998 90 628 22 28",
+      cards: [
+        { id:"a2_uz",   label:"UZCARD", number:"5614 6818 1645 5285" },
+        { id:"a2_humo", label:"HUMO",   number:"9860 1001 2451 5832" },
+      ]
+    }
   };
 
   // 🔔 E'lonlar
@@ -628,6 +765,9 @@
   let cachedActiveAdminKey = DEFAULT_ADMIN; // admin1/admin2
   let cachedTelegramUsername = ADMIN_MAP[cachedActiveAdminKey];
 
+  // ✅ tanlangan karta
+  let selectedCardId = null;
+
   // ====== DOM ======
   const $ = (s)=>document.querySelector(s);
 
@@ -647,6 +787,10 @@
 
   const copyBtn = $("#copyBtn");
   const buyBtn = $("#buyBtn");
+
+  // Cards UI
+  const payOwner = $("#payOwner");
+  const cardsGrid = $("#cardsGrid");
 
   // Admin modal
   const adminBtn = $("#adminBtn");
@@ -672,19 +816,37 @@
 
   function safeTextEncode(str){ return encodeURIComponent(str); }
 
+  function getActivePaymentInfo(){
+    return ADMIN_PAYMENTS[cachedActiveAdminKey] || ADMIN_PAYMENTS[DEFAULT_ADMIN];
+  }
+
+  function getSelectedCard(){
+    const pinfo = getActivePaymentInfo();
+    if(!pinfo || !pinfo.cards || !pinfo.cards.length) return null;
+
+    // tanlangan yo‘q bo‘lsa -> birinchisini tanlaymiz
+    if(!selectedCardId){
+      selectedCardId = pinfo.cards[0].id;
+    }
+
+    return pinfo.cards.find(c=>c.id===selectedCardId) || pinfo.cards[0];
+  }
+
   function makeMessage(pack, playerId){
+    const card = getSelectedCard();
     const packName = pack.title.trim();
-    const saleLine = (pack.sale && pack.oldPrice) ? \nChegirma: ${pack.oldPrice} → ${pack.price} : "";
-    return Salom! Men ${packName} olmoqchiman.\nNarx: ${pack.price}${saleLine}\nID: ${playerId}\n;
+    const saleLine = (pack.sale && pack.oldPrice) ? `\nChegirma: ${pack.oldPrice} → ${pack.price}` : "";
+    const cardLine = card ? `\nKarta: ${card.number}` : "";
+    return `Salom! Men ${packName} olmoqchiman.\nNarx: ${pack.price}${saleLine}\nID: ${playerId}${cardLine}\n`;
   }
 
   function tgLink(username, message){
-    return https://t.me/${username}?text=${safeTextEncode(message)};
+    return `https://t.me/${username}?text=${safeTextEncode(message)}`;
   }
 
   function toast(title, msg){
     const wrap = $("#toastWrap");
-    wrap.innerHTML = 
+    wrap.innerHTML = `
       <div class="toast show" id="toast">
         <div class="dot"></div>
         <div class="content">
@@ -693,18 +855,18 @@
         </div>
         <button class="x" id="toastClose">✕</button>
       </div>
-    ;
+    `;
     $("#toastClose").onclick = ()=> wrap.innerHTML="";
     setTimeout(()=>{ wrap.innerHTML=""; }, 7000);
   }
 
   function renderAnnouncements(){
-    announceListEl.innerHTML = ANNOUNCEMENTS.map(a => 
+    announceListEl.innerHTML = ANNOUNCEMENTS.map(a => `
       <div class="note">
         <p class="t">${a.title}</p>
         <p class="d">${a.text}</p>
       </div>
-    ).join("");
+    `).join("");
   }
 
   function render(){
@@ -722,10 +884,10 @@
       const icon = p.icon || FALLBACK_ICON;
 
       const oldPriceHtml = (p.sale && p.oldPrice)
-        ? <span class="priceOld">${p.oldPrice}</span>
-        : `;
+        ? `<span class="priceOld">${p.oldPrice}</span>`
+        : ``;
 
-      return 
+      return `
         <div class="item ${active} ${saleClass}" data-id="${p.id}">
           <div class="badge">AKSIYA</div>
           <img class="pack-ico" src="${icon}" alt="">
@@ -740,7 +902,7 @@
             </div>
           </div>
         </div>
-      ;
+      `;
     }).join("");
 
     [...document.querySelectorAll(".item")].forEach(el=>{
@@ -791,14 +953,20 @@
     // ID yo‘q -> qizil highlight + toast
     if(!pid || pid.length < 5){
       toast("ID kerak", "O‘yin ID’ingizni kiriting (kamida 5 ta belgi).");
-
       playerIdEl.classList.add("err");
       playerIdEl.focus();
       setTimeout(()=>playerIdEl.classList.remove("err"), 900);
       return null;
     }
 
-    return {pack, pid};
+    // karta tanlanmagan
+    const card = getSelectedCard();
+    if(!card){
+      toast("Karta topilmadi", "Admin kartalari sozlanmagan.");
+      return null;
+    }
+
+    return {pack, pid, card};
   }
 
   async function copyText(text){
@@ -816,9 +984,87 @@
     }
   }
 
+  function formatCardNumber(n){
+    // 16 xonali bo‘lsa guruhlab ko‘rsatamiz
+    const digits = (n || "").replace(/\s+/g,"").trim();
+    if(digits.length === 16){
+      return digits.replace(/(.{4})/g, "$1 ").trim();
+    }
+    // 9860... 16 dan farq qilsa ham bo‘lib ko‘rsatamiz
+    return (n || "").trim();
+  }
+
+  async function copyCardNumber(n){
+    try{
+      await navigator.clipboard.writeText((n||"").trim());
+      toast("Nusxalandi ✅", "Karta raqami nusxalandi 🙂");
+    }catch(e){
+      toast("Xato", "Copy bo‘lmadi. Brauzer ruxsatini tekshiring.");
+    }
+  }
+
+  function renderCards(){
+    const pinfo = getActivePaymentInfo();
+    if(!pinfo){
+      payOwner.textContent = "—";
+      cardsGrid.innerHTML = "";
+      return;
+    }
+
+    // yuqoridagi matn
+    payOwner.textContent = `${pinfo.ownerText} • ${pinfo.phone}`;
+
+    // selectedCardId admin almashganda mos kelmay qolsa -> reset
+    const exists = pinfo.cards.some(c => c.id === selectedCardId);
+    if(!exists){
+      selectedCardId = pinfo.cards[0]?.id || null;
+    }
+
+    cardsGrid.innerHTML = pinfo.cards.map(c=>{
+      const active = (c.id === selectedCardId) ? "active" : "";
+      const numShow = formatCardNumber(c.number);
+      return `
+        <div class="pCard ${active}" data-cid="${c.id}">
+          <div class="pTop">
+            <div class="pBrand">
+              <div class="pChip"></div>
+              <span>${c.label}</span>
+            </div>
+            <div class="pRadio">
+              <input type="radio" name="payCard" ${c.id===selectedCardId ? "checked" : ""} />
+              Tanlash
+            </div>
+          </div>
+
+          <div class="pNum">${numShow}</div>
+
+          <div class="pMeta">
+            <span>${pinfo.ownerText}</span>
+            <button class="copyMini" data-copy="${c.id}">🙂 Copy</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    // click handlers
+    [...cardsGrid.querySelectorAll(".pCard")].forEach(cardEl=>{
+      cardEl.onclick = (e)=>{
+        const copyBtn = e.target.closest("[data-copy]");
+        if(copyBtn){
+          const cid = copyBtn.getAttribute("data-copy");
+          const card = pinfo.cards.find(x=>x.id===cid);
+          if(card) copyCardNumber(card.number);
+          e.stopPropagation();
+          return;
+        }
+        selectedCardId = cardEl.getAttribute("data-cid");
+        renderCards();
+      };
+    });
+  }
+
   // ====== FIRESTORE: activeAdmin ni oldindan olib turamiz (kutish yo‘q) ======
   async function initAdminRouting(){
-    // settings/main document
     const ref = doc(db, "settings", "main");
 
     // 1) tezda bir marta o‘qib olamiz (fallback uchun)
@@ -829,14 +1075,13 @@
         if(d.activeAdmin && ADMIN_MAP[d.activeAdmin]){
           cachedActiveAdminKey = d.activeAdmin;
           cachedTelegramUsername = ADMIN_MAP[cachedActiveAdminKey];
-          whoActive.textContent = (cachedActiveAdminKey==="admin1") ? "SULTSH (@SULTSH_YT)" : "Dilshod (@dilshodbs1031)";
         }
       }
     }catch(e){
       // internet bo‘lmasa ham DEFAULT_ADMIN bilan ishlayveradi
     }
 
-    // 2) real-time listener (tez va doim yangilanadi)
+    // 2) real-time listener
     try{
       onSnapshot(ref, (snap)=>{
         if(!snap.exists()) return;
@@ -844,18 +1089,32 @@
         if(d.activeAdmin && ADMIN_MAP[d.activeAdmin]){
           cachedActiveAdminKey = d.activeAdmin;
           cachedTelegramUsername = ADMIN_MAP[cachedActiveAdminKey];
-          whoActive.textContent = (cachedActiveAdminKey==="admin1") ? "SULTSH (@SULTSH_YT)" : "Dilshod (@dilshodbs1031)";
         }
+        // UI yangilash (kartalar ham shu admin bo‘yicha chiqadi)
+        whoActive.textContent =
+          (cachedActiveAdminKey==="admin1")
+            ? "Sultsh (@SULTSH_YT)"
+            : "Dilshod (@dilshodbs1031)";
+
+        renderCards();
       });
     }catch(e){
       // listener ishlamasa ham muammo emas
     }
+
+    // init UI
+    whoActive.textContent =
+      (cachedActiveAdminKey==="admin1")
+        ? "Sultsh (@SULTSH_YT)"
+        : "Dilshod (@dilshodbs1031)";
+
+    renderCards();
   }
 
   async function setActiveAdmin(key){
     const ref = doc(db, "settings", "main");
     await setDoc(ref, { activeAdmin: key }, { merge:true });
-    toast("Saqlanndi ✅", key==="admin1" ? "Endi buyurtmalar SULTSH’ga yo‘naltiriladi." : "Endi buyurtmalar Dilshod’ga yo‘naltiriladi.");
+    toast("Saqlanndi ✅", key==="admin1" ? "Endi Sultsh online." : "Endi Dilshod online.");
   }
 
   // ====== AUTH UI ======
@@ -893,6 +1152,7 @@
 
   onAuthStateChanged(auth, (user)=>{
     if(user){
+      loginBlock.style.display = "block";
       loginBlock.style.display = "none";
       panelBlock.style.display = "block";
     }else{
@@ -904,10 +1164,9 @@
   // ====== INIT ======
   renderAnnouncements();
 
-  const bellBtn2 = bellBtn;
-  bellBtn2.onclick = ()=>{ panel.classList.toggle("show"); };
+  bellBtn.onclick = ()=>{ panel.classList.toggle("show"); };
   document.addEventListener("click", (e)=>{
-    if(!panel.contains(e.target) && e.target !== bellBtn2){
+    if(!panel.contains(e.target) && e.target !== bellBtn){
       panel.classList.remove("show");
     }
   });
@@ -939,7 +1198,6 @@
     }
   });
   playerIdEl.addEventListener("input", ()=>{
-    // qizil holatni yozayotgan paytda o‘chirib boramiz
     playerIdEl.classList.remove("err");
     if(keepIdEl.checked){
       localStorage.setItem("bs_player_id", getPlayerId());
@@ -956,7 +1214,7 @@
     const ok = validate();
     if(!ok) return;
 
-    // ✅ Bu yerda endi HECH QANDAY await yo‘q — kutmaydi.
+    // ✅ await yo‘q — kutmaydi
     const username = cachedTelegramUsername || ADMIN_MAP[DEFAULT_ADMIN];
     window.open(tgLink(username, makeMessage(ok.pack, ok.pid)), "_blank", "noopener");
   };
